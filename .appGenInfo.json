@@ -1,0 +1,23 @@
+{
+  "generationParameters": {
+    "generationDate": "Thu Apr 16 2026 10:12:17 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "None",
+    "metadataFilename": "",
+    "serviceUrl": "N/A",
+    "appName": "test_gst_recon",
+    "appTitle": "GST Reconciliation",
+    "appDescription": "An SAP Fiori application.",
+    "appNamespace": "gstr",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.146.0",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": false,
+    "generatorVersion": "1.22.0",
+    "template": "Basic",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```"
+  }
+}

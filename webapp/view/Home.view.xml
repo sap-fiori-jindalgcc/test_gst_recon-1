@@ -1,0 +1,244 @@
+<mvc:View
+    controllerName="gstr.testgstrecon.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:f="sap.f"
+    xmlns:unified="sap.ui.unified"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds">
+
+<Page showHeader="false">
+
+<VBox class="mainContainer">
+
+<!-- HEADER -->
+<HBox class="headerBar" justifyContent="SpaceBetween" alignItems="Center">
+    <VBox class="headerText">
+        <Title text="GST Reconciliation" level="H1"/>
+        <Text text="Upload data, reconcile invoices, and review matching results" class="headerSubtitle"/>
+    </VBox>
+
+    <HBox class="headerActions" alignItems="Center">
+        <Button text="Run Reconciliation" icon="sap-icon://play" iconFirst="false" press="onRunReconciliation" type="Accept" class="sapUiTinyMarginEnd" />
+        <Button text="Export" icon="sap-icon://download" iconFirst="false" press="onExportAll" class="sapUiTinyMarginBegin" />
+    </HBox>
+</HBox>
+
+<!-- UPLOAD -->
+<VBox class="card uploadCard">
+    <Title text="Upload Files" level="H2"/>
+    <Text text="Upload your SAP Excel file and GST JSON file. The system matches on GSTIN + Invoice No + Date." class="cardSubtitle"/>
+
+    <HBox justifyContent="SpaceBetween" class="uploadRow">
+        <VBox width="48%" class="uploadItem">
+            <Label text="SAP Excel"/>
+            <HBox class="filePicker">
+                <Input id="sapFileName" editable="false" placeholder="Choose SAP invoice file" valueState="None"/>
+                <Button text="Browse" icon="sap-icon://upload" iconFirst="false" press="onSapBrowse" type="Emphasized"/>
+            </HBox>
+        </VBox>
+
+        <VBox width="48%" class="uploadItem">
+            <Label text="GST JSON"/>
+            <HBox class="filePicker">
+                <Input id="gstFileName" editable="false" placeholder="Choose GSTR-2B JSON file" valueState="None"/>
+                <Button text="Browse" icon="sap-icon://upload" iconFirst="false" press="onGstBrowse" type="Emphasized"/>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <unified:FileUploader id="sapUploader" visible="true" class="hiddenUploader" uploadOnChange="false" change="onSapSelected" />
+    <unified:FileUploader id="gstUploader" visible="true" class="hiddenUploader" uploadOnChange="false" change="onGstSelected" />
+</VBox>
+
+<!-- MAPPING -->
+<HBox class="card" justifyContent="SpaceBetween">
+
+<VBox width="48%" visible="{= ${appModel>/upload/sapColumns}.length > 0 }">
+    <Title text="SAP Mapping"/>
+    <Text text="Map the SAP file columns so the app can identify GSTIN, invoice number, invoice date, taxable amount and GST amount." class="mappingNote"/>
+    <form:SimpleForm editable="true">
+        <Label text="GSTIN"/>
+        <Select items="{appModel>/upload/sapColumns}" selectedKey="{appModel>/mapping/sap/gstin}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+
+        <Label text="Invoice"/>
+        <Select items="{appModel>/upload/sapColumns}" selectedKey="{appModel>/mapping/sap/invoice}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+
+        <Label text="Date"/>
+        <Select items="{appModel>/upload/sapColumns}" selectedKey="{appModel>/mapping/sap/date}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+
+        <Label text="Taxable"/>
+        <Select items="{appModel>/upload/sapColumns}" selectedKey="{appModel>/mapping/sap/taxable}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+
+        <Label text="GST"/>
+        <Select items="{appModel>/upload/sapColumns}" selectedKey="{appModel>/mapping/sap/gst}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+    </form:SimpleForm>
+</VBox>
+
+<VBox width="48%" visible="{= ${appModel>/upload/gstColumns}.length > 0 }">
+    <Title text="GST Mapping"/>
+    <Text text="Map the GST file columns to the app fields. These fields form the comparison key and GST amounts." class="mappingNote"/>
+    <form:SimpleForm editable="true">
+        <Label text="GSTIN"/>
+        <Select items="{appModel>/upload/gstColumns}" selectedKey="{appModel>/mapping/gst/gstin}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+
+        <Label text="Invoice"/>
+        <Select items="{appModel>/upload/gstColumns}" selectedKey="{appModel>/mapping/gst/invoice}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+
+        <Label text="Date"/>
+        <Select items="{appModel>/upload/gstColumns}" selectedKey="{appModel>/mapping/gst/date}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+
+        <Label text="Taxable"/>
+        <Select items="{appModel>/upload/gstColumns}" selectedKey="{appModel>/mapping/gst/taxable}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+
+        <Label text="GST"/>
+        <Select items="{appModel>/upload/gstColumns}" selectedKey="{appModel>/mapping/gst/gst}">
+            <core:Item key="{appModel>}" text="{appModel>}"/>
+        </Select>
+    </form:SimpleForm>
+</VBox>
+
+</HBox>
+
+<!-- KPI -->
+<HBox class="kpiContainer">
+
+<VBox class="kpiCard accent">
+    <Text text="Total" class="kpiLabel"/>
+    <Title text="{appModel>/summary/total}" class="kpiValue"/>
+    <Text text="All invoices in the current upload set" class="kpiNote"/>
+</VBox>
+
+<VBox class="kpiCard success">
+    <Text text="Matched" class="kpiLabel"/>
+    <Title text="{appModel>/summary/matched}" class="kpiValue"/>
+    <Text text="Exact GST matches found" class="kpiNote"/>
+</VBox>
+
+<VBox class="kpiCard warning">
+    <Text text="Missing" class="kpiLabel"/>
+    <Title text="{appModel>/summary/missing}" class="kpiValue"/>
+    <Text text="SAP invoices without GST counterpart" class="kpiNote"/>
+</VBox>
+
+<VBox class="kpiCard error">
+    <Text text="Mismatch" class="kpiLabel"/>
+    <Title text="{appModel>/summary/mismatch}" class="kpiValue"/>
+    <Text text="Invoices with GST amount differences" class="kpiNote"/>
+</VBox>
+
+</HBox>
+
+<!-- CHART -->
+<VBox class="card">
+<Title text="Reconciliation Distribution"/>
+
+<viz:VizFrame vizType="pie" width="100%" height="300px">
+    <viz:dataset>
+        <viz.data:FlattenedDataset data="{appModel>/chart}">
+            <viz.data:dimensions>
+                <viz.data:DimensionDefinition name="Status" value="{status}"/>
+            </viz.data:dimensions>
+            <viz.data:measures>
+                <viz.data:MeasureDefinition name="Count" value="{count}"/>
+            </viz.data:measures>
+        </viz.data:FlattenedDataset>
+    </viz:dataset>
+
+    <viz:feeds>
+        <viz.feeds:FeedItem uid="size" type="Measure" values="Count"/>
+        <viz.feeds:FeedItem uid="color" type="Dimension" values="Status"/>
+    </viz:feeds>
+</viz:VizFrame>
+</VBox>
+
+<!-- INSIGHTS -->
+<VBox class="card">
+<Title text="Top Mismatches"/>
+
+<List items="{appModel>/insights}">
+    <StandardListItem
+        title="{appModel>invoice}"
+        description="GST Diff: {appModel>gstDiff}"/>
+</List>
+</VBox>
+
+<!-- TABLE -->
+<VBox class="card">
+
+<Toolbar>
+    <Title text="Reconciliation Results"/>
+    <ToolbarSpacer/>
+
+    <SearchField id="searchField" liveChange="onSearch"/>
+
+    <Select id="statusSelect" change="onStatusFilterChange" selectedKey="ALL">
+        <core:Item key="ALL" text="All"/>
+        <core:Item key="Matched" text="Matched"/>
+        <core:Item key="Missing" text="Missing"/>
+        <core:Item key="Mismatch" text="Mismatch"/>
+    </Select>
+
+</Toolbar>
+
+<Table id="resultTable" items="{appModel>/result}" growing="true">
+
+<columns>
+<Column><Text text="GSTIN"/></Column>
+<Column><Text text="Invoice"/></Column>
+<Column><Text text="Date"/></Column>
+<Column><Text text="SAP Taxable"/></Column>
+<Column><Text text="GST Taxable"/></Column>
+<Column><Text text="GST Diff"/></Column>
+<Column><Text text="Status"/></Column>
+<Column><Text text="Risk"/></Column>
+<Column><Text text="Details"/></Column>
+</columns>
+
+<items>
+<ColumnListItem type="Active" press="onRowPress">
+<cells>
+<Text text="{appModel>gstin}"/>
+<Text text="{appModel>invoice}"/>
+<Text text="{appModel>date}"/>
+<Text text="{appModel>sapTaxable}"/>
+<Text text="{appModel>gstTaxable}"/>
+<Text text="{appModel>gstDiff}"/>
+
+<ObjectStatus text="{appModel>status}"
+state="{= ${appModel>status} === 'Matched' ? 'Success' : ${appModel>status} === 'Missing' ? 'Warning' : 'Error'}"/>
+
+<Text text="{appModel>risk}"/>
+<Text text="{appModel>details}" wrapping="true"/>
+</cells>
+</ColumnListItem>
+</items>
+
+</Table>
+
+</VBox>
+
+</VBox>
+</Page>
+</mvc:View>

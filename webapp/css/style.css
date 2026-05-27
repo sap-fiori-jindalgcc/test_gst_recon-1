@@ -1,0 +1,140 @@
+/* Enter your custom styles here */
+.mainContainer {
+    padding: 2rem;
+    background: radial-gradient(circle at top left, rgba(69, 123, 255, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(38, 198, 218, 0.15), transparent 32%),
+        #eef2f6;
+}
+
+.headerBar {
+    background: linear-gradient(135deg, #1f3d82 0%, #3f6bb4 100%);
+    padding: 2rem 2.2rem;
+    border-radius: 24px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 28px 60px rgba(18, 52, 109, 0.14);
+    color: #ffffff;
+}
+
+.headerBar .sapMTitle,
+.headerBar .sapMText,
+.headerSubtitle {
+    color: #ffffff;
+}
+
+.headerActions {
+    gap: 0.75rem;
+}
+
+.uploadCard {
+    position: relative;
+    overflow: hidden;
+}
+
+.uploadRow {
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.filePicker {
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.card,
+.uploadCard {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 1.85rem;
+    border-radius: 24px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 18px 42px rgba(18, 52, 109, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+}
+
+.cardSubtitle {
+    margin-top: 0.55rem;
+    color: #5c6b7c;
+    font-size: 0.98rem;
+    line-height: 1.6;
+}
+
+.mappingNote {
+    margin-bottom: 1rem;
+    color: #5c6b7c;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.sapMColumnList .sapMColumnListItem .sapMText {
+    white-space: normal;
+}
+
+.kpiContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.kpiCard {
+    flex: 1;
+    min-width: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+    padding: 1.6rem;
+    border-radius: 22px;
+    text-align: left;
+    transition: transform 0.24s ease, box-shadow 0.24s ease;
+    border: 1px solid rgba(34, 83, 207, 0.1);
+    box-shadow: 0 16px 34px rgba(15, 31, 78, 0.06);
+}
+
+.kpiCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 48px rgba(15, 31, 78, 0.12);
+}
+
+.kpiCard.accent {
+    border-left: 6px solid #4149f8;
+}
+
+.kpiCard.success {
+    border-left: 6px solid #2c9a4c;
+}
+
+.kpiCard.warning {
+    border-left: 6px solid #f6a800;
+}
+
+.kpiCard.error {
+    border-left: 6px solid #d20b2a;
+}
+
+.kpiLabel {
+    color: #5c6b7c;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.kpiValue {
+    font-size: 2.2rem;
+    letter-spacing: -0.02em;
+    margin: 0.4rem 0;
+}
+
+.kpiNote {
+    color: #7c8b9d;
+    font-size: 0.95rem;
+}
+
+.hiddenUploader {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sapMPage {
+    background: transparent;
+}
